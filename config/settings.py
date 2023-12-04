@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
     # packages
     "rest_framework",
-    'django-filter',
+    #'django-filters',
+    'rest_framework_simplejwt',  # using jwt for auths
 
     # apps
     'accounts',
@@ -49,6 +50,16 @@ INSTALLED_APPS = [
 
 # User Model Registration
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Rest configs
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+
+    'DEFAULT_FILTER_BACKENDS':
+    ['django_filters.rest_framework.DjangoFilterBackend'],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
