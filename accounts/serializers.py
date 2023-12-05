@@ -39,6 +39,7 @@ class RegistrationSerializer(UserSerializerClass):
 
 #Login Serializer
 class UserLoginSerializer(TokenObtainPairSerializer):
+    
     def validate(self, attrs):
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
