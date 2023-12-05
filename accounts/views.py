@@ -1,11 +1,12 @@
 
 from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import viewsets, views
+from rest_framework import viewsets
 
 # for user registration
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth.models import update_last_login
 from rest_framework_simplejwt.settings import api_settings 
@@ -52,28 +53,6 @@ class RegisterViewSet(viewsets.ViewSet):
             "token": res["access"]
             }, status=status.HTTP_201_CREATED)
     
-
-# # Login viewSet for users to logina
-# class LoginViewSet(views.APIView):
-#     # items needed to initiate user login
-#     permission_classes = (AllowAny,)
-#     #htttp_method_names = ['post']
-
-#     def post(self, request, *args, **kwatgs):
-#         serializer = UserLoginSerializer(data=request.data)
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#         except TokenError as e:
-#             raise InvalidToken(e.args[0])
-#         refresh = RefreshToken.for_user(serializer.user)
-#         data = {
-#             'user': UserSerializerClass(serializer.user).data,
-#             'refresh': str(refresh),
-#             'access': str(refresh.access_token)
-#         }
-#         if api_settings.UPDATE_LAST_LOGIN:
-#             update_last_login(None, serializer.user)
-#         return Response(serializer.validated_data, status=status.HTTP_200_OK)
     
 class LoginViewSet(viewsets.ViewSet):
     serializer_class = UserLoginSerializer
@@ -88,3 +67,15 @@ class LoginViewSet(viewsets.ViewSet):
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
+# adding refresh logic to refresh users upon logins 
+class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
+    permission_classes = (AllowAny,)
+    http_method_names = ['post']
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        
