@@ -5,6 +5,8 @@ from django.contrib.auth.models import update_last_login
 
 from .models import CustomUser
 
+from posts.serializers import AbstractPostSerializer
+
 
 
 # User serializer
@@ -51,3 +53,4 @@ class UserLoginSerializer(TokenObtainPairSerializer):
         return data
 
 
+# Joining the Post with Users
