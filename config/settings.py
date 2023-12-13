@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',  # using jwt for auths
 
     # apps
+    "posts",
     'accounts',
+    
 ]
 
 # User Model Registration
