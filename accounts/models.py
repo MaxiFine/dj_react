@@ -16,41 +16,18 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # import  django
 # django.setup()
-
-# from posts.models import AbstractManager, AbstractModels
-
-
-# Abstract Model Manager Definition
-class AbstractManager(models.Model):
-    def get_object_by_public_id(self, public_id):
-        try:
-            isinstance = self.get(public_id)
-            return isinstance
-        except (ObjectDoesNotExist, ValueError, TypeError):
-            return Http404
-    
-
-# Abstract Model definition
-class AbstractModels(models.Model):
-    public_id = models.UUIDField(db_index=True, unique=True, default=uuid.uuid4, editable=False)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    objects = AbstractManager()
-
-    class Meta:
-        abstract = True
-
+from posts.models import AbstractManager, AbstractModels
 
 
 
 # creating the usermanager
 class CustomUserManager(BaseUserManager, AbstractManager):
-    def get_object_by_public_id(self, public_id):
-        try:
-            instance = self.get(public_id=public_id)
-            return instance
-        except (ObjectDoesNotExist, ValueError, TypeError):
-            return Http404
+    # def get_object_by_public_id(self, public_id):
+    #     try:
+    #         instance = self.get(public_id=public_id)
+    #         return instance
+    #     except (ObjectDoesNotExist, ValueError, TypeError):
+    #         return Http404
     def create_user(self, username, email, password=None, **kwargs):
         """Create a user and return with email, username
             and password. """
@@ -87,9 +64,9 @@ class CustomUserManager(BaseUserManager, AbstractManager):
 # User Model
 class CustomUser(AbstractModels, AbstractBaseUser, PermissionsMixin):
     # removed to implement the abstract CustomUser in Posts models
-    public_id = models.UUIDField(db_index=True, unique=True, 
-                                 default=uuid.uuid4, 
-                                 editable=False)
+    # public_id = models.UUIDField(db_index=True, unique=True, 
+    #                              default=uuid.uuid4, 
+    #                              editable=False)
     username = models.CharField(db_index=True, max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -98,7 +75,7 @@ class CustomUser(AbstractModels, AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     # removed for the CustomUser abstraction for Post model
     #created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    #updated = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
