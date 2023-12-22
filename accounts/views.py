@@ -1,7 +1,7 @@
 
 from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 # for user registration
 from rest_framework.response import Response
@@ -15,8 +15,17 @@ from .serializers import UserSerializerClass, RegistrationSerializer, UserLoginS
 from .models import CustomUser
 
 
+
+# WRITING THE POST VIEWSETS
+class AbstractViewSet(viewsets.ModelViewSet):  
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['updated', 'created']
+    ordering = ['-updated']
+
+
+
 # Users Serializer to list all Users
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(AbstractViewSet):
     http_method_names = ('patch', 'get')
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializerClass
@@ -79,3 +88,8 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
             raise InvalidToken(e.args[0])
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
         
+
+
+
+
+

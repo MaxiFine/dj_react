@@ -27,4 +27,24 @@ class AbstractModels(models.Model):
         abstract = True
 
 
+# models for Post Using Abstractions
+# Post manager
+class PostManager(AbstractManager):
+    pass
 
+
+# Post Manager
+class Post(AbstractModels):
+    author = models.ForeignKey(to="accounts.CustomUser", on_delete=models.CASCADE)
+    body = models.TextField()
+    edited = models.BooleanField(default=False)
+    
+    objects = PostManager()
+
+    def __str__(self):
+        return f"{self.author.name}"
+    
+    class Meta:
+        db_table = 'post'
+
+        

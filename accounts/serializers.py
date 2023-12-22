@@ -10,10 +10,10 @@ from posts.serializers import AbstractPostSerializer
 
 
 # User serializer
-class UserSerializerClass(serializers.ModelSerializer):
-    id = serializers.UUIDField(source='public_id', read_only=True, format='hex')
-    created = serializers.DateTimeField(read_only=True)
-    updated = serializers.DateTimeField(read_only=True)
+class UserSerializerClass(AbstractPostSerializer):
+    # id = serializers.UUIDField(source='public_id', read_only=True, format='hex')
+    # created = serializers.DateTimeField(read_only=True)
+    # updated = serializers.DateTimeField(read_only=True)
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'first_name', 'last_name', 
