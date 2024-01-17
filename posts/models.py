@@ -33,7 +33,7 @@ class PostManager(AbstractManager):
     pass
 
 
-# Post Manager
+# Post class for user to make Posts
 class Post(AbstractModels):
     author = models.ForeignKey(to="accounts.CustomUser", on_delete=models.CASCADE)
     body = models.TextField()

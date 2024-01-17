@@ -14,17 +14,12 @@ from rest_framework_simplejwt.settings import api_settings
 from .serializers import UserSerializerClass, RegistrationSerializer, UserLoginSerializer
 from .models import CustomUser
 
-
-
-# WRITING THE POST VIEWSETS
-class AbstractViewSet(viewsets.ModelViewSet):  
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['updated', 'created']
-    ordering = ['-updated']
-
+# external imports for Posts
+from posts.views import AbstractViewSet
 
 
 # Users Serializer to list all Users
+# subclass with the AbstractViewSet to use its fields(DRY)
 class UserViewSet(AbstractViewSet):
     http_method_names = ('patch', 'get')
     permission_classes = [IsAuthenticated]

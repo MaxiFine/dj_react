@@ -1,55 +1,21 @@
-import uuid
-
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
-
-from django.db import models
-from django.core.exceptions import ObjectDoesNotExist
 
 
-# Abracting the CustomUser
+# Abracting the CustomUser for Post objects
 from posts.models import AbstractManager, AbstractModels
-# Try this
-
-# import  django
-# django.setup()
-
-# from posts.models import AbstractManager, AbstractModels
 
 
-# # Abstract Model Manager Definition
-# class AbstractManager(models.Model):
-#     def get_object_by_public_id(self, public_id):
-#         try:
-#             isinstance = self.get(public_id)
-#             return isinstance
-#         except (ObjectDoesNotExist, ValueError, TypeError):
-#             return Http404
-    
-
-# # Abstract Model definition
-# class AbstractModels(models.Model):
-#     public_id = models.UUIDField(db_index=True, unique=True, default=uuid.uuid4, editable=False)
-#     created = models.DateTimeField(auto_now_add=True)
-#     updated = models.DateTimeField(auto_now=True)
-#     # objects = AbstractManager()
-
-#     class Meta:
-#         abstract = True
-
-
-
-
-# creating the usermanager
+# creating the usermanager for user managements
 class CustomUserManager(BaseUserManager, AbstractManager):
-    def get_object_by_public_id(self, public_id):
-        try:
-            instance = self.get(public_id=public_id)
-            return instance
-        except (ObjectDoesNotExist, ValueError, TypeError):
-            return Http404
+    # Refactoring: removed this method to subclass Usermanager
+
+    # def get_object_by_public_id(self, public_id):
+    #     try:
+    #         instance = self.get(public_id=public_id)
+    #         return instance
+    #     except (ObjectDoesNotExist, ValueError, TypeError):
+    #         return Http404
     def create_user(self, username, email, password=None, **kwargs):
         """Create a user and return with email, username
             and password. """
@@ -83,12 +49,13 @@ class CustomUserManager(BaseUserManager, AbstractManager):
         return user
 
 
-# User Model
+# User Model: Subclass of the AbstractModel in the Post Model
 class CustomUser(AbstractModels, AbstractBaseUser, PermissionsMixin):
-    # removed to implement the abstract CustomUser in Posts models
-    public_id = models.UUIDField(db_index=True, unique=True, 
-                                 default=uuid.uuid4, 
-                                 editable=False)
+    # removed public_id, updated, created: to implement the 
+    # abstract CustomUser in Posts models
+    # public_id = models.UUIDField(db_index=True, unique=True, 
+    #                              default=uuid.uuid4, 
+    #                              editable=False)
     username = models.CharField(db_index=True, max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -96,8 +63,8 @@ class CustomUser(AbstractModels, AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     # removed for the CustomUser abstraction for Post model
-    #created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    # created = models.DateTimeField(auto_now_add=True)
+    # updated = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
