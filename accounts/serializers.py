@@ -4,22 +4,17 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import update_last_login
 
 from .models import CustomUser
-
-from posts.serializers import AbstractPostSerializer
-
+from .utils import AbstractSerializer
 
 
-# User serializer
-class UserSerializerClass(AbstractPostSerializer):
-    # id = serializers.UUIDField(source='public_id', read_only=True, format='hex')
-    # created = serializers.DateTimeField(read_only=True)
-    # updated = serializers.DateTimeField(read_only=True)
+
+class UserSerializerClass(AbstractSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'first_name', 'last_name', 
                   'email', 'is_active', 'created',
                   'updated']
-        read_only_field = ['is_active']
+        read_only_fields = ['is_active']
 
 
 # User Registration Serializer

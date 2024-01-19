@@ -7,27 +7,31 @@ from rest_framework.exceptions import ValidationError
 # from accounts.serializers import AbstractPostSerializer
 from .models import Post
 from accounts.models import CustomUser
-
-
-# To be used to as a subclass for fields that will need the 
-# following fields data: User as a subclass for the CustomUser
-class AbstractPostSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField(source='public_id', read_only=True, 
-                               format='hex')
-    created = serializers.DateTimeField(read_only=True)
-    updated = serializers.DateTimeField(read_only=True)
+from accounts.serializers import UserSerializerClass
+from .utils import AbstractSerializer
 
 
 
 # writing Post Serializer to serialize User Posts
-class PostSerializer(AbstractPostSerializer):
-    author = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), 
+class PostSerializer(AbstractSerializer):
+    author = serializers.SlugRelatedField(queryset= CustomUser.objects.all(), 
                                    slug_field='public_id')
+    # print(author)
     
     def validate_author(self, value):
         if self.context["request"].user != value:
             raise ValidationError("You can't create a post for another user.")
         return value
+    
+    # Using the ppublic_id to retrieve the user and serialize the user object
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        author = CustomUser.objects.get_object_by_public_id(
+            rep['author']
+        )
+        rep['author'] = UserSerializerClass(author).data
+        return rep
+        
     
     class Meta:
         model = Post

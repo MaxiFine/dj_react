@@ -5,15 +5,26 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
 
+# was expecting a public id bu
+# # Abstract Model Manager Definition
+# class AbstractManager(models.Manager):
+#     def get_object_by_public_id(self, public_id):
+#         try:
+#             isinstance = self.get(public_id)
+#             return isinstance
+#         except (ObjectDoesNotExist, ValueError, TypeError):
+#             return Http404
 
-# Abstract Model Manager Definition
+# switched to use a primary key by the self.get method
+# and not the public id
 class AbstractManager(models.Manager):
     def get_object_by_public_id(self, public_id):
         try:
-            isinstance = self.get(public_id)
-            return isinstance
+            # Assuming `public_id` is a field in your model
+            instance = self.get(public_id=public_id)
+            return instance
         except (ObjectDoesNotExist, ValueError, TypeError):
-            return Http404
+            raise Http404
     
 
 # Abstract Model definition
