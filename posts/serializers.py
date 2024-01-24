@@ -31,6 +31,13 @@ class PostSerializer(AbstractSerializer):
         )
         rep['author'] = UserSerializerClass(author).data
         return rep
+    
+     # Adding update method to allow user to edit posts
+    def update(self, instance, validated_data):
+        if not instance.edited:
+            validated_data['edited'] = True
+        instance  = super().update(instance, validated_data)
+        return instance
         
     
     class Meta:
