@@ -18,8 +18,8 @@ class AbstractViewSet(viewsets.ModelViewSet):
    
 
 # Handling User Posts
-class PostViewSet(AbstractViewSet):
-    http_method_names = ('post', 'get',)
+class PostViewSet(AbstractViewSet):  # adding delete and update actions
+    http_method_names = ('post', 'get', 'put', 'delete')
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
 

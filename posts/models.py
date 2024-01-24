@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
 
-# was expecting a public id bu
+# was expecting a public id but
 # # Abstract Model Manager Definition
 # class AbstractManager(models.Manager):
 #     def get_object_by_public_id(self, public_id):
