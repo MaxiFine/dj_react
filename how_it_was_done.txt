@@ -1,0 +1,7 @@
+ADDING LIKE FEATURE TO ENABLE USERS TO LIKE AND UNLIKE A POST
+1. Added  a new posts_liked field to the User model.
+2. Write methods on the User model to like and remove a like from a post. We’ll also add a
+method to check whether the user has liked a post.
+3. Add likes_count and has_liked to PostSerializer.
+4. Add endpoints to like and dislike a post.
+

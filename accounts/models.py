@@ -65,6 +65,8 @@ class CustomUser(AbstractModels, AbstractBaseUser, PermissionsMixin):
     # removed for the CustomUser abstraction for Post model
     # created = models.DateTimeField(auto_now_add=True)
     # updated = models.DateTimeField(auto_now=True)
+    posts_liked = models.ManyToManyField('posts.Post', related_name='liked_by')  # like feature
+    # performed migrations after field was added
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -72,7 +74,5 @@ class CustomUser(AbstractModels, AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}" 
-
-
 
 
